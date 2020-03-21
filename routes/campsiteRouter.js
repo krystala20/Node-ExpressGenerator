@@ -27,7 +27,7 @@ campsiteRouter.route('/')
         console.log('Campsite Created', campsite);
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
-        res.json(campsites);
+        res.json(campsite);
     })
     .catch(err => next(err));
 })
@@ -46,7 +46,6 @@ campsiteRouter.route('/')
     })
     .catch(err => next(err));
 });
-
 
 campsiteRouter.route('/:campsiteId')
 
@@ -211,9 +210,6 @@ campsiteRouter.route('/:campsiteId/comments/:commentId')
     })
     .catch(err => next(err));
 })
-.delete((req, res, next) => {
-    Campsite.findById(req.params.campsiteId)
-    .then(campsite => {
         if (campsite && campsite.comments.id(req.params.commentId)) {
             campsite.comments.id(req.params.commentId).remove();
             campsite.save()

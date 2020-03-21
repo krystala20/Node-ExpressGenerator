@@ -22,7 +22,8 @@ const commentSchema = new Schema({
         type: String, 
         required: true
     }
-},{
+},
+{
     timestamps: true
 });
 
@@ -56,9 +57,9 @@ const campsiteSchema = new Schema({
     },
 //This causes every campsite document to be able to contain multiple comment documents stored in an array
     comments: [commentSchema]
-}, {
-    //when doc is created it will be given a Created at and Updated at property
-    timestamps: true
+    }, 
+//when doc is created it will be given a Created at and Updated at property
+   { timestamps: true
 });
 
 //Using campsiteSchema for Campsite collection
