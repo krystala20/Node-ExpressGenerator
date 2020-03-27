@@ -13,6 +13,9 @@ campsiteRouter.route('/')
 
 .get((req, res, next) => {
     Campsite.find()
+    //when campsite docs are retrieved, populate author field of comments sub documents
+    //by finding user doc that matches object ID stored there
+    .populate('comments.author')
     .then(campsites => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
@@ -52,6 +55,7 @@ campsiteRouter.route('/:campsiteId')
 
 .get((req, res, next) => {
     Campsite.findById(req.params.campsiteId)
+    .populate('comments.author')
    .then(campsite => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
@@ -92,6 +96,7 @@ campsiteRouter.route('/:campsiteId/comments')
 
 .get((req, res, next) => {
     Campsite.findById(req.params.campsiteId)
+    .populate('comments.author')
     .then(campsite => {
         if(campsite) {
             res.statusCode = 200;
@@ -110,6 +115,9 @@ campsiteRouter.route('/:campsiteId/comments')
     Campsite.findById(req.params.campsiteId)
     .then(campsite => {
         if(campsite) {
+            //add id of current user to req body as author b4 it is pushed in comments array
+            //ensures that when comment is saved it will have id of user in author field so later we can access it to populate this field
+            req.body.author = req.user.id;
             campsite.comments.push(req.body);
             campsite.save()
             .then(campsite => {
@@ -159,6 +167,7 @@ campsiteRouter.route('/:campsiteId/comments/:commentId')
 
 .get((req, res, next) => {
     Campsite.findById(req.params.campsiteId)
+    .populate('comments.author')
     .then(campsite => {
         if(campsite && campsite.comments.id(req.params.commentId))  {
             res.statusCode = 200;
