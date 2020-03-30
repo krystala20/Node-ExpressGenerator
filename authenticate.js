@@ -47,5 +47,18 @@ exports.jwtPassport = passport.use(
     )
 );
 
+verifyAdmin = (req, res, next) => {
+    if (req.user.admin) {
+        return next();    
+    } else {
+        res.statusCode = 403;
+        err = new Error("You are not authorized to perform this operation!");
+        return next(err);
+    }
+}
+
+//exporting function that checks if user is an admin
+exports.verifyAdmin = verifyAdmin;
+
 //use this to verify that request is from an authenticated user
 exports.verifyUser = passport.authenticate('jwt', {session: false});

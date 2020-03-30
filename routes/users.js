@@ -6,8 +6,16 @@ const authenticate = require('../authenticate');
 const router = express.Router();
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+//router.get : the GET method of users endpoint: verify the user , verify user is admin
+router.get('/', authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+  //find and return all users in DB
+  User.find()
+  .then(users => {
+    res.statusCode =200;
+    res.setHeader('Content-Type', 'application/json');
+    res.json(users);
+  })
+  .catch(err => next(err));
 });
 
 //endpoint allows new user to register on website
