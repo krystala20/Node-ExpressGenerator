@@ -10,6 +10,7 @@ var usersRouter = require('./routes/users');
 const campsiteRouter = require('./routes/campsiteRouter');
 const partnerRouter = require('./routes/partnerRouter');
 const promotionRouter =  require('./routes/promotionRouter');
+const uploadRouter = require('./routes/uploadRouter');
 
 //Establish connection to MongoDB server//
 const mongoose = require('mongoose');
@@ -56,9 +57,11 @@ app.use('/users', usersRouter);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+//adding routers, specify paths they handle 
 app.use('/campsites', campsiteRouter);
 app.use('/promotions', promotionRouter);
 app.use('/partners', partnerRouter);
+app.use('/imageUpload', uploadRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
