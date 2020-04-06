@@ -73,7 +73,9 @@ router.get('/logout', cors.corsWithOptions, (req, res, next) => {
 });
 
 router.get('/facebook/token', passport.authenticate('facebook-token'), (req, res) => {
+  //ensure there is a valid user. If FB token strategy worked, passport should have added user property to request object
   if (req.user) {
+  //create JSON Web token
       const token = authenticate.getToken({_id: req.user._id});
       res.statusCode = 200;
       res.setHeader('Content-Type', 'application/json');

@@ -71,12 +71,16 @@ exports.facebookPassport = passport.use(
             clientSecret: config.facebook.clientSecret
         },
         (accessToken, refreshToken, profile, done) => {
+            //check if we already have a user account in Mongo DB.
+            //Do any users have facebookId = profile.id
             User.findOne({facebookId: profile.id}, (err, user) => {
                 if (err) {
                     return done(err, false);
                 }
-                if (err && user) {
+                //if there is no error but user already exists in DB
+                if (!err && user) {
                     return done(null, user);
+                //no error and no user. Create a new user document from FB profile info
                 } else {
                     user = new User ( {username: profile.displayName } );
                     user.facebookId= profile.id;
